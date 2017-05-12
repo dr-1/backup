@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# Except
+!backup.py
+!restore.py
+!config.py
+!README.md
+!LICENSE
+!.gitignore
