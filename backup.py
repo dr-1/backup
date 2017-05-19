@@ -162,7 +162,6 @@ def run_full():
     versions older than config.MAX_AGE unless no version older than
     config.TRUSTED_AGE exists. The newest version is always kept.
     """
-
     printlog("Backing up")
     if config.DRY_RUN:
         print("This is a dry run. File operations are only simulated.")
@@ -237,9 +236,8 @@ def backup_dir(source, target):
                 os.mkdir(target_dir)
             printlog("Created:\t" + target_dir, level="file operation")
 
+        # Mark deleted files
         else:
-
-            # Mark deleted files
             mark_deleted(source_dir=source_dir, target_dir=target_dir)
 
         # Back up each file in source dir
@@ -284,7 +282,8 @@ def backup_dir(source, target):
 def scan(directory):
     """Count files in a directory tree to be processed.
 
-    Returns: file count
+    Returns:
+        file count
     """
     print("Scanning...", end="\r")
     return sum(len(files) for (_dir, subdirs, files) in os.walk(directory))
@@ -394,10 +393,10 @@ def mark_all_items_deleted(directory):
 def get_archives(directory):
     """Get archives from a directory, non-recursively.
 
-       Args:
-           directory: full path
-       Returns:
-           set of Archive instances
+    Args:
+        directory: full path
+    Returns:
+        set of Archive instances
     """
     archives = set()
     for item in os.listdir(directory):
