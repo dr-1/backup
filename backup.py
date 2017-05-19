@@ -507,14 +507,13 @@ def process_config():
         return
 
     # Check that all configuration names exist
+    config.complete = True
     for name in ("DIR_PAIRS", "MAX_AGE", "TRUSTED_AGE", "EXCLUDED_DIRS",
                  "EXCLUDED_FILES", "REPORT_SKIPPED", "DRY_RUN", "LOG_FILE",
                  "STAY_OPEN"):
         if name not in dir(config):
             config.complete = False
             input("Missing configuration: " + name)
-    else:
-        config.complete = True
     if not config.complete:
         return
 
