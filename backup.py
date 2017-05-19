@@ -486,7 +486,8 @@ def prune_dir(directory, delete_before, trusted_before):
 
 
 def exclude(path, excluded):
-    """Check if a file or directory should be skipped.
+    """Check if a file or directory should be skipped. Globbing is
+    supported. Case insensitive.
 
     Args:
         path: path of the file or dir to be checked

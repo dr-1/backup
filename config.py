@@ -8,13 +8,14 @@ DIR_PAIRS = [("/my/source/directory/1", "/my/target/directory/1"),
              ("/my/source/directory/2", "/my/target/directory/2")]
 
 # Collection of file names to exclude from backup. Supports globbing.
+# Case insensitive.
 EXCLUDED_FILES = {"Thumbs.db",
                   ".DS_Store",
                   "~*",  # Temporary files of some applications
                   "*.swp"}  # Like Vim temporary files
 
 # Collection of directory names to exclude from backup. Supports
-# globbing.
+# globbing. Case insensitive.
 EXCLUDED_DIRS = {"__pycache__",
                  ".ipython",
                  ".git"}
