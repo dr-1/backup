@@ -336,14 +336,12 @@ def mark_deleted(source_dir, target_dir):
 
     # Check for deleted dirs and create markers for them
     for target_subdir in target_subdirs:
-        original_dir = os.path.join(source_dir, target_subdir)
+        original_dir = os.path.join(source_dir,
+                                    os.path.basename(target_subdir))
         if not os.path.isdir(original_dir):
 
             # Create markers for all items contained in a deleted dir
-            if not config.DRY_RUN:
-                mark_all_items_deleted(os.path.join(target_dir, target_subdir))
-            printlog("Marked deleted:\t" + original_dir,
-                     level="file operation")
+            mark_all_items_deleted(os.path.join(target_dir, target_subdir))
 
     # Check for deleted files and create markers for them
     for unmarked_file_unlabeled in unmarked_files_unlabeled:
@@ -375,6 +373,13 @@ def mark_all_items_deleted(directory):
     stamp = check_time.strftime("@{}{}".format(LABEL_DT_FORMAT,
                                                DEL_MARKER_EXT))
     for _dir, subdirs, files in os.walk(directory):
+
+        # Skip marking if all files were already marked earlier
+        archives = get_archives(_dir)
+        latest_archives = get_latest_versions(archives)
+        if all(archive.is_deletion_marker for archive in latest_archives):
+            continue
+
         for file in files:
             path = os.path.join(_dir, file)
             try:
@@ -382,7 +387,9 @@ def mark_all_items_deleted(directory):
             except RuntimeError:
                 continue
             marker_file = archive.unlabeled_path + stamp
-            open(marker_file, "w").close()
+            if not config.DRY_RUN:
+                open(marker_file, "w").close()
+        printlog("Marked deleted:\t" + _dir, level="file operation")
 
 
 def get_archives(directory):
