@@ -327,12 +327,7 @@ def mark_deleted(source_dir, target_dir):
             target_archives.add(Archive(item))
         except RuntimeError:
             pass
-    target_archives_unlabeled = {archive.unlabeled_name
-                                 for archive in target_archives}
-    latest_versions = {max((archive for archive in target_archives
-                            if archive.unlabeled_name == unlabeled),
-                       key=lambda archive: archive.timestamp)
-                       for unlabeled in target_archives_unlabeled}
+    latest_versions = get_latest_versions(target_archives)
 
     # Find files whose latest archive version is not a deletion marker
     unmarked_files_unlabeled = {archive.unlabeled_name
@@ -425,6 +420,22 @@ def get_versions(archives):
         versions[unlabeled_name] = versions.get(unlabeled_name, set())
         versions[unlabeled_name].add(archive)
     return versions
+
+
+def get_latest_versions(archives):
+    """Get the latest version of each file in a group of archives.
+
+    Args:
+        archives: collection of Archive instances
+    Returns:
+        latest versions as a set of Archive instances
+    """
+    archives_unlabeled = {archive.unlabeled_name for archive in archives}
+    latest_versions = {max((archive for archive in archives
+                            if archive.unlabeled_name == unlabeled),
+                       key=lambda archive: archive.timestamp)
+                       for unlabeled in archives_unlabeled}
+    return latest_versions
 
 
 def prune_dir(directory, delete_before, trusted_before):
