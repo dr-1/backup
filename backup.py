@@ -435,14 +435,14 @@ def get_latest_versions(archives):
     Args:
         archives: collection of Archive instances
     Returns:
-        latest versions as a set of Archive instances
+        generator of latest archive versions as Archive instances
     """
     archives_unlabeled = {archive.unlabeled_name for archive in archives}
-    latest_versions = {max((archive for archive in archives
-                            if archive.unlabeled_name == unlabeled),
-                       key=lambda archive: archive.timestamp)
-                       for unlabeled in archives_unlabeled}
-    return latest_versions
+    for unlabeled in archives_unlabeled:
+        latest_version = max((archive for archive in archives
+                              if archive.unlabeled_name == unlabeled),
+                             key=lambda archive: archive.timestamp)
+        yield latest_version
 
 
 def prune_dir(directory, delete_before, trusted_before):
