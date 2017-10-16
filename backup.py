@@ -279,6 +279,9 @@ def backup_dir(source, target):
 def scan(directory):
     """Count files in a directory tree to be processed.
 
+    Args:
+        directory: path of directory to scan
+
     Returns:
         file count
     """
@@ -362,7 +365,7 @@ def mark_all_items_deleted(directory):
     source items no longer exist.
 
     Args:
-        directory: full path
+        directory: path of directory
     """
     check_time = datetime.datetime.utcnow()
     stamp = check_time.strftime("@" + LABEL_DT_FORMAT + DEL_MARKER_EXT)
@@ -390,7 +393,8 @@ def get_archives(directory):
     """Get archives from a directory, non-recursively.
 
     Args:
-        directory: full path
+        directory: path of directory
+
     Returns:
         set of Archive instances
     """
@@ -411,6 +415,7 @@ def get_versions(archives):
 
     Args:
         archives: collection of Archive instances
+
     Returns:
         dictionary with archives' unlabeled names as keys and sets of
             corresponding archives as values
@@ -428,8 +433,10 @@ def get_latest_versions(archives):
 
     Args:
         archives: collection of Archive instances
-    Returns:
-        generator of latest archive versions as Archive instances
+
+    Yields:
+        Next in unordered collection of latest archive versions, as an
+            Archive instance
     """
     archives_unlabeled = {archive.unlabeled_name for archive in archives}
     for unlabeled in archives_unlabeled:
@@ -504,6 +511,7 @@ def exclude(path, excluded):
     Args:
         path: path of the file or dir to be checked
         excluded: collection of excluded patterns
+
     Returns:
         boolean
     """
@@ -550,7 +558,11 @@ def process_config():
 
 
 def parse_arguments():
-    """Parse command-line arguments to override config values."""
+    """Parse command-line arguments to override config values.
+
+    Returns:
+        Namespace populated with arguments
+    """
     argparser = argparse.ArgumentParser()
     arggroup = argparser.add_mutually_exclusive_group()
     arggroup.add_argument("--dry-run",
@@ -575,7 +587,7 @@ def printlog(content, level="info"):
 
     Args:
         content: string to print and log
-        level: severity level of the message. Value can be "info", "file
+        level: severity level of the message. One of "info", "file
             operation", "warning" or "error".
     """
     dry_run_indicator = (config.DRY_RUN * (level == "file operation") *
