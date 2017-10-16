@@ -481,8 +481,8 @@ def prune_dir(directory, delete_before, trusted_before):
 
     # Delete versions older than specified limit, except protected versions
     for archive in archives:
-        if (archive.timestamp < delete_before and
-                archive not in protected_versions):
+        if (archive.timestamp < delete_before
+                and archive not in protected_versions):
             if not config.DRY_RUN:
                 os.remove(archive.path)
             printlog("Pruned:\t" + archive.path, level="file operation")
@@ -533,9 +533,9 @@ def process_config():
     config.DIR_PAIRS = [(os.path.abspath(source), os.path.abspath(target))
                         for (source, target) in config.DIR_PAIRS]
     config.EXCLUDED_DIRS = ({f"*{os.sep}{value}"  # lowest level
-                             for value in config.EXCLUDED_DIRS} |
-                            {f"*{os.sep}{value}{os.sep}*"  # subdirs
-                             for value in config.EXCLUDED_DIRS})
+                             for value in config.EXCLUDED_DIRS}
+                            | {f"*{os.sep}{value}{os.sep}*"  # subdirs
+                               for value in config.EXCLUDED_DIRS})
     config.EXCLUDED_FILES = {f"*{os.sep}{value}"
                              for value in config.EXCLUDED_FILES}
 
