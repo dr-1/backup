@@ -44,9 +44,8 @@ def restore(source=None, target=None, snapshot_datetime=None):
         input_target = input("Directory to save restored files to: ")
         target = os.path.normpath(input_target)
     if not os.path.isdir(target):
-        if not input("Target directory does not exist:\n{}\n"
-                     "Create it ([y]/n)? "
-                     "".format(target)).lower().startswith("n"):
+        if not input(f"Target directory does not exist:\n{target}\n"
+                     "Create it ([y]/n)? ").lower().startswith("n"):
             os.makedirs(target)
         else:
             return
@@ -65,7 +64,7 @@ def restore(source=None, target=None, snapshot_datetime=None):
             print("Datetime format not recognized:", input_datetime)
             return
 
-    backup.printlog("Restoring {}\nto {}".format(source, target))
+    backup.printlog(f"Restoring {source}\nto {target}")
 
     # Traverse and restore archive_dir
     for source_dir, source_subdirs, source_files in os.walk(source):
@@ -110,10 +109,9 @@ def restore(source=None, target=None, snapshot_datetime=None):
                         try:
                             zipped.extract(archive_member, path=target_dir)
                         except FileExistsError:
-                            backup.printlog("Could not extract {} from {}: "
-                                            "file already exists in target"
-                                            "".format(target_path,
-                                                      snapshot_version.name),
+                            backup.printlog(f"Could not extract {target_path} "
+                                            f"from {snapshot_version.name}: "
+                                            "file already exists in target",
                                             level="error")
                         else:
                             backup.printlog("Restored:\t" + target_path,

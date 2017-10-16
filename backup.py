@@ -132,8 +132,7 @@ class Archive:
         # Build the name of the target archive file
         filename = os.path.basename(source_path)
         target_path_unlabeled = os.path.join(target_dir, filename)
-        target_path = "{}@{}.zip".format(target_path_unlabeled,
-                                         timestamp_label)
+        target_path = f"{target_path_unlabeled}@{timestamp_label}.zip"
 
         # Skip archiving if the same archive already exists in the target dir
         if os.path.isfile(target_path):
@@ -172,13 +171,12 @@ def run_full():
             printlog("Source is not a directory: " + source, level="error")
             continue
         if not os.path.isdir(target):
-            if input("\nTarget directory does not exist: {}\n"
-                     "Create it (y/[n])? "
-                     "".format(target)).lower().startswith("y"):
+            if input(f"\nTarget directory does not exist: {target}\n"
+                     "Create it (y/[n])? ").lower().startswith("y"):
                 os.makedirs(target)
             else:
                 continue
-        print("\nSource: {}\nTarget: {}".format(source, target))
+        print(f"\nSource: {source}\nTarget: {target}")
         backup_dir(source, target)
 
     print()
@@ -301,8 +299,7 @@ def show_progress(processed, total, overwrite=True):
         end = "\r"  # Resets the cursor to the start of the line
     else:
         end = "\n"  # New line
-    print("{}/{} files ({:.0%}) processed"
-          "".format(processed, total, processed / total),
+    print(f"{processed}/{total} files ({processed / total:.0%}) processed",
           end=end)
 
 
@@ -538,11 +535,11 @@ def process_config():
     # Sanitize paths
     config.DIR_PAIRS = [(os.path.abspath(source), os.path.abspath(target))
                         for (source, target) in config.DIR_PAIRS]
-    config.EXCLUDED_DIRS = ({"*{0}{1}".format(os.sep, value)  # lowest level
+    config.EXCLUDED_DIRS = ({f"*{os.sep}{value}"  # lowest level
                              for value in config.EXCLUDED_DIRS} |
-                            {"*{0}{1}{0}*".format(os.sep, value)  # subdirs
+                            {f"*{os.sep}{value}{os.sep}*"  # subdirs
                              for value in config.EXCLUDED_DIRS})
-    config.EXCLUDED_FILES = {"*{0}{1}".format(os.sep, value)
+    config.EXCLUDED_FILES = {f"*{os.sep}{value}"
                              for value in config.EXCLUDED_FILES}
 
     # Parse and sanity-check day values
@@ -568,7 +565,7 @@ def parse_arguments():
                           nargs="?", dest="dry_run", const=False)
     args = argparser.parse_args()
     if args.dry_run is not None and args.dry_run != config.DRY_RUN:
-        print("Overriding dry-run={} config setting".format(config.DRY_RUN))
+        print(f"Overriding dry-run={config.DRY_RUN} config setting")
         config.DRY_RUN = args.dry_run
     return args
 
