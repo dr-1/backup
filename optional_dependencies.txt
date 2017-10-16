@@ -1,0 +1,2 @@
+# Optional dependency to show terminal output in color
+colorama>=0.3.9
