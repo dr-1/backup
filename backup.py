@@ -76,13 +76,12 @@ class Archive:
 
         The timestamp method parses the datetime string as a
         datetime.datetime object.
-
         """
         directory, filename = os.path.split(path)
 
         # Check whether path is an archive file
         if filename.count(LABEL_SEPARATOR) == 0:  # Not an archive file
-            raise RuntimeError("Not an archive file: {}".format(path))
+            raise RuntimeError("Not an archive file: " + path)
 
         # Assign properties if it is an archive file
         self.path = path
@@ -345,8 +344,7 @@ def mark_deleted(source_dir, target_dir):
         original_file = os.path.join(source_dir, unmarked_file_unlabeled)
         if not os.path.isfile(original_file):
             check_time = datetime.datetime.utcnow()
-            stamp = check_time.strftime("@{}{}".format(LABEL_DT_FORMAT,
-                                                       DEL_MARKER_EXT))
+            stamp = check_time.strftime("@" + LABEL_DT_FORMAT + DEL_MARKER_EXT)
             marker_file = os.path.join(target_dir,
                                        unmarked_file_unlabeled + stamp)
 
@@ -367,8 +365,7 @@ def mark_all_items_deleted(directory):
         directory: full path
     """
     check_time = datetime.datetime.utcnow()
-    stamp = check_time.strftime("@{}{}".format(LABEL_DT_FORMAT,
-                                               DEL_MARKER_EXT))
+    stamp = check_time.strftime("@" + LABEL_DT_FORMAT + DEL_MARKER_EXT)
     for _dir, subdirs, files in os.walk(directory):
 
         # Skip marking if all files were already marked earlier
