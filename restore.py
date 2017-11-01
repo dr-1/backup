@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Backup restoration
+"""Backup restoration.
 
 Restore snapshots of backups created by backup.py.
 """

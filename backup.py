@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Backup tool
+"""Backup tool.
 
 Back up files between folders, keeping UTC-timestamp-labeled archives of
 changed files.
@@ -45,20 +45,20 @@ _COMPRESSED_FORMAT_EXTS = {
 
 
 class Archive:
-    """Archive version of a file"""
+    """Archive version of a file."""
 
     def __init__(self, path):
         """Create an Archive object by parsing a file path.
 
         Args:
-            path: full path of file
+            path: path of the file
 
         Archives are identified by the presence of the label separator
         character in the filename.
 
-        Parsing separates the parts of the full path: directory,
-        unlabeled filename (name of the original file), label separator,
-        datetime string, label extension.
+        Parsing separates the parts of the path: directory, unlabeled
+        filename (name of the original file), label separator, datetime
+        string, label extension.
 
         Example: /home/user/somefile.txt@20170410-153431Z.zip
             directory:           /home/user/
@@ -114,8 +114,8 @@ class Archive:
         """Create a UTC-timestamp-labeled archive of a file.
 
         Args:
-            source_path: full path of the file to be backed up
-            target_dir: full path of the dir to back up to
+            source_path: path of the file to be backed up
+            target_dir: path of the directory to back up to
         """
 
         # Get the last-modified timestamp of the source file
@@ -182,8 +182,12 @@ def run_full():
 
 
 def backup_dir(source, target):
-    """Create backups of files from a source dir to a target dir,
-    creating UTC-timestamp-labeled versions of changed files.
+    """Back up files between directories, creating UTC-timestamp-labeled
+    versions of changed files.
+
+    Args:
+        source: source directory
+        target: target directory
     """
 
     # Aliases to distinguish similar local names more clearly
@@ -282,7 +286,7 @@ def scan(directory):
         directory: path of directory to scan
 
     Returns:
-        file count
+        File count
     """
     print("Scanning...", end="\r")
     return sum(len(files) for (_dir, subdirs, files) in os.walk(directory))
@@ -294,7 +298,7 @@ def show_progress(processed, total, overwrite=True):
     Args:
         processed: number of processed files
         total: number of processed and unprocessed files
-        overwrite: boolean; following output will overwrite output line
+        overwrite: boolean; overwrite output line with new output
     """
     if overwrite:
         end = "\r"  # Resets the cursor to the start of the line
@@ -310,8 +314,8 @@ def mark_deleted(source_dir, target_dir):
     timestamp-labeled, empty ".deleted" files in target_dir.
 
     Args:
-        source_dir: full path of dir to be backed up
-        target_dir: full path of dir to back up to
+        source_dir: path of directory to be backed up
+        target_dir: path of directory to back up to
     """
 
     # Take stock of files in target
@@ -359,9 +363,9 @@ def mark_deleted(source_dir, target_dir):
 
 
 def mark_all_items_deleted(directory):
-    """Create markers (labeled, empty files and dirs) for all archive
-    files in a directory tree, indicating that their corresponding
-    source items no longer exist.
+    """Create markers (labeled, empty files and directories) for all
+    archive files in a directory tree, indicating that their
+    corresponding source items no longer exist.
 
     Args:
         directory: path of directory
@@ -395,7 +399,7 @@ def get_archives(directory):
         directory: path of directory
 
     Returns:
-        set of Archive instances
+        Set of Archive instances
     """
     archives = set()
     for item in os.listdir(directory):
@@ -416,7 +420,7 @@ def get_versions(archives):
         archives: collection of Archive instances
 
     Returns:
-        dictionary with archives' unlabeled names as keys and sets of
+        Dictionary with archives' unlabeled names as keys and sets of
             corresponding archives as values
     """
     versions = {}
@@ -446,10 +450,10 @@ def get_latest_versions(archives):
 
 
 def prune_dir(directory, delete_before, trusted_before):
-    """Delete obsolete archives in a dir.
+    """Delete obsolete archives in a directory.
 
     Args:
-        directory: full path
+        directory: path of the directory
         delete_before: dt.datetime object; cut-off time for deletion
         trusted_before: dt.datetime object; cut-off time for trusted
             file versions to limit deletion of old ones. Not used if set
@@ -507,11 +511,11 @@ def exclude(path, excluded):
     supported. Case insensitive.
 
     Args:
-        path: path of the file or dir to be checked
+        path: path of the file or directory to be checked
         excluded: collection of excluded patterns
 
     Returns:
-        boolean
+        Boolean
     """
     return any(fnmatch.fnmatch(path, excluded_value)
                for excluded_value in excluded)

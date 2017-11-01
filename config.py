@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Sample configuration file for backup.py"""
+"""Sample configuration file for backup.py."""
 
 # Directory pairs: a collection of (source_dir, target_dir) tuples.
 # Do not mix these up!
