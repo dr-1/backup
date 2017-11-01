@@ -81,7 +81,7 @@ class Archive:
 
         # Check whether path is an archive file
         if filename.count(LABEL_SEPARATOR) == 0:  # Not an archive file
-            raise RuntimeError("Not an archive file: " + path)
+            raise ValueError("Not an archive file: " + path)
 
         # Assign properties if it is an archive file
         self.path = path
@@ -327,7 +327,7 @@ def mark_deleted(source_dir, target_dir):
     for item in target_items:
         try:
             target_archives.add(Archive(item))
-        except RuntimeError:
+        except ValueError:
             pass
     latest_versions = get_latest_versions(target_archives)
 
@@ -384,7 +384,7 @@ def mark_all_items_deleted(directory):
             path = os.path.join(_dir, file)
             try:
                 archive = Archive(path)
-            except RuntimeError:
+            except ValueError:
                 continue
             marker_file = archive.unlabeled_path + stamp
             if not config.DRY_RUN:
@@ -406,7 +406,7 @@ def get_archives(directory):
         path = os.path.join(directory, item)
         try:
             archive = Archive(path)
-        except RuntimeError:
+        except ValueError:
             pass
         else:
             archives.add(archive)
