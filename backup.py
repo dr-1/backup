@@ -19,11 +19,14 @@ import datetime as dt
 import fnmatch
 import logging
 import argparse
+import warnings
 
 try:
     import colorama  # pip install colorama
 except ImportError:
     colorama = None
+    warnings.warn("colorama package not available - screen output will not be "
+                  "in color.")
 
 import config
 
