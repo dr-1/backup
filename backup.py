@@ -36,12 +36,12 @@ DEL_MARKER_EXT = ".deleted"
 # Some common file types that are already compressed and typically do not
 # compress well again, so they can be stored in uncompressed archives to
 # increase performance.
-_COMPRESSED_FORMAT_EXTS = {
-                           # Media
-                           "jpg", "jpeg", "mp3", "dng", "png", "mov", "avi",
-                           "pdf",
-                           # Archives
-                           "zip", "7z", "gz", "bz2"}
+COMPRESSED_FORMAT_EXTS = {
+                          # Media
+                          "jpg", "jpeg", "mp3", "dng", "png", "mov", "avi",
+                          "pdf",
+                          # Archives
+                          "zip", "7z", "gz", "bz2"}
 
 
 class Archive:
@@ -138,7 +138,7 @@ class Archive:
 
         # Decide whether to compress the archive file
         ext = os.path.splitext(filename)[1]
-        if ext[1:].lower() in _COMPRESSED_FORMAT_EXTS:  # Without dot
+        if ext[1:].lower() in COMPRESSED_FORMAT_EXTS:  # Without dot
             compression = zipfile.ZIP_STORED
         else:
             compression = zipfile.ZIP_LZMA
