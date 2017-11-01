@@ -173,6 +173,8 @@ def run_full():
                      "Create it (y/[n])? ").lower().startswith("y"):
                 os.makedirs(target)
             else:
+                printlog("Skipped source directory: " + source,
+                         level="warning")
                 continue
         print(f"\nSource: {source}\nTarget: {target}")
         backup_dir(source, target)
