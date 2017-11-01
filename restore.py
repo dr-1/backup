@@ -6,7 +6,7 @@ Restore snapshots of backups created by backup.py.
 """
 
 import os
-import datetime
+import datetime as dt
 import zipfile
 
 import backup
@@ -24,9 +24,9 @@ def restore(source=None, target=None, snapshot_datetime=None):
             prompts for user input.
         target: directory to save the snapshot to. None prompts for
             for user input.
-        snapshot_datetime: datetime.datetime object; the file structure
-            as it existed at this time will be restored if available.
-            None prompts for user input.
+        snapshot_datetime: dt.datetime object; the file structure as it
+            existed at this time will be restored if available. None
+            prompts for user input.
     """
     if backup.config.DRY_RUN:
         print("This is a dry run. File operations are only simulated.")
@@ -58,8 +58,8 @@ def restore(source=None, target=None, snapshot_datetime=None):
         input_datetime = input("Datetime of snapshot to restore (in UTC; "
                                "format as YYYY-mm-DD HH:MM:SS): ")
         try:
-            snapshot_datetime = datetime.datetime.strptime(input_datetime,
-                                                           "%Y-%m-%d %H:%M:%S")
+            snapshot_datetime = dt.datetime.strptime(input_datetime,
+                                                     "%Y-%m-%d %H:%M:%S")
         except ValueError:
             print("Datetime format not recognized:", input_datetime)
             return

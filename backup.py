@@ -15,7 +15,7 @@ interactive mode. Restart the interpreter to reload config.
 import os
 import time
 import zipfile
-import datetime
+import datetime as dt
 import fnmatch
 import logging
 import argparse
@@ -74,8 +74,8 @@ class Archive:
         The extension distinguishes regular archives (".zip") from
         deletion markers (".deleted").
 
-        The timestamp method parses the datetime string as a
-        datetime.datetime object.
+        The timestamp method parses the datetime string as a dt.datetime
+        object.
         """
         directory, filename = os.path.split(path)
 
@@ -97,10 +97,10 @@ class Archive:
 
     @property
     def timestamp(self):
-        """Parse the archive's label datetime string as a
-        datetime.datetime object.
+        """Parse the archive's label datetime string as a dt.datetime
+        object.
         """
-        return datetime.datetime.strptime(self.label_datetime, LABEL_DT_FORMAT)
+        return dt.datetime.strptime(self.label_datetime, LABEL_DT_FORMAT)
 
     @property
     def unlabeled_path(self):
@@ -124,9 +124,8 @@ class Archive:
         except FileNotFoundError:
             printlog("Broken link?\t" + source_path, level="warning")
             return
-        timestamp_utc = datetime.datetime.utcfromtimestamp(timestamp_raw)
-        timestamp_label = datetime.datetime.strftime(timestamp_utc,
-                                                     LABEL_DT_FORMAT)
+        timestamp_utc = dt.datetime.utcfromtimestamp(timestamp_raw)
+        timestamp_label = dt.datetime.strftime(timestamp_utc, LABEL_DT_FORMAT)
 
         # Build the name of the target archive file
         filename = os.path.basename(source_path)
@@ -191,7 +190,7 @@ def backup_dir(source, target):
     source_main, target_main = source, target
 
     # Calculate modification time thresholds for deletion and trusted versions
-    now = datetime.datetime.utcnow()
+    now = dt.datetime.utcnow()
     if config.MAX_AGE is None:
         delete_before = None
     else:
@@ -346,7 +345,7 @@ def mark_deleted(source_dir, target_dir):
     for unmarked_file_unlabeled in unmarked_files_unlabeled:
         original_file = os.path.join(source_dir, unmarked_file_unlabeled)
         if not os.path.isfile(original_file):
-            check_time = datetime.datetime.utcnow()
+            check_time = dt.datetime.utcnow()
             stamp = check_time.strftime("@" + LABEL_DT_FORMAT + DEL_MARKER_EXT)
             marker_file = os.path.join(target_dir,
                                        unmarked_file_unlabeled + stamp)
@@ -367,7 +366,7 @@ def mark_all_items_deleted(directory):
     Args:
         directory: path of directory
     """
-    check_time = datetime.datetime.utcnow()
+    check_time = dt.datetime.utcnow()
     stamp = check_time.strftime("@" + LABEL_DT_FORMAT + DEL_MARKER_EXT)
     for _dir, subdirs, files in os.walk(directory):
 
@@ -451,11 +450,10 @@ def prune_dir(directory, delete_before, trusted_before):
 
     Args:
         directory: full path
-        delete_before: datetime.datetime object; cut-off time for
-            deletion
-        trusted_before: datetime.datetime object; cut-off time for
-            trusted file versions to limit deletion of old ones. Not
-            used if set to None. Excludes deletion markers.
+        delete_before: dt.datetime object; cut-off time for deletion
+        trusted_before: dt.datetime object; cut-off time for trusted
+            file versions to limit deletion of old ones. Not used if set
+            to None. Excludes deletion markers.
     """
 
     # Take stock of archives in directory and group them by their unlabeled
@@ -548,8 +546,8 @@ def process_config():
                              for value in config.EXCLUDED_FILES}
 
     # Parse and sanity-check day values
-    config.MAX_AGE = datetime.timedelta(days=config.MAX_AGE)
-    config.TRUSTED_AGE = datetime.timedelta(days=config.TRUSTED_AGE)
+    config.MAX_AGE = dt.timedelta(days=config.MAX_AGE)
+    config.TRUSTED_AGE = dt.timedelta(days=config.TRUSTED_AGE)
     if config.TRUSTED_AGE > config.MAX_AGE:
         input("Config error: TRUSTED_AGE must be less than MAX_AGE")
         return
