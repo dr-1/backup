@@ -64,7 +64,7 @@ def restore(source=None, target=None, snapshot_datetime=None):
             print("Datetime format not recognized:", input_datetime)
             return
 
-    backup.printlog(f"Restoring {source}\nto {target}")
+    backup.printlog(f"Restoring {source}\nto {target}", level="info")
 
     # Traverse and restore archive_dir
     for source_dir, source_subdirs, source_files in os.walk(source):
@@ -121,7 +121,7 @@ def restore(source=None, target=None, snapshot_datetime=None):
                                         level="file operation")
 
     print()
-    backup.printlog("Done")
+    backup.printlog("Done", level="info")
     input()
 
 

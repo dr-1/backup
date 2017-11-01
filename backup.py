@@ -159,7 +159,7 @@ def run_full():
     versions older than config.MAX_AGE unless no version older than
     config.TRUSTED_AGE exists. The newest version is always kept.
     """
-    printlog("Backing up")
+    printlog("Backing up", level="info")
     if config.DRY_RUN:
         print("This is a dry run. File operations are only simulated.")
 
@@ -180,7 +180,7 @@ def run_full():
         backup_dir(source, target)
 
     print()
-    printlog("Done")
+    printlog("Done", level="info")
 
 
 def backup_dir(source, target):
@@ -222,7 +222,7 @@ def backup_dir(source, target):
         # Skip excluded dirs
         if exclude(source_dir, config.EXCLUDED_DIRS):
             if config.REPORT_SKIPPED:
-                printlog("Skipped:\t" + source_dir)
+                printlog("Skipped:\t" + source_dir, level="info")
             processed_files_count += len(source_files)
             continue
 
@@ -247,7 +247,7 @@ def backup_dir(source, target):
             source_path = os.path.join(source_dir, filename)
             if exclude(source_path, config.EXCLUDED_FILES):
                 if config.REPORT_SKIPPED:
-                    printlog("Skipped:\t" + source_path)
+                    printlog("Skipped:\t" + source_path, level="info")
                 processed_files_count += 1
                 show_progress(processed_files_count, file_count)
                 continue
@@ -583,7 +583,7 @@ def parse_arguments():
     return args
 
 
-def printlog(content, level="info"):
+def printlog(content, level):
     """Print and log content.
 
     Using print is simpler than setting up a logging.StreamHandler with
