@@ -615,8 +615,8 @@ if colorama is not None:
                       "error": colorama.Fore.RED,
                       "reset": colorama.Fore.RESET}
 else:
-    _output_colors = {"info": "", "file operation": "", "warning": "",
-                      "error": "", "reset": ""}
+    _output_colors = {level: "" for level in {"info", "file operation",
+                                              "warning", "error", "reset"}}
 
 # Processing times per dir for debugging
 dir_processing_times = []
