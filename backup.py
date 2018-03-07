@@ -642,7 +642,11 @@ if __name__ == "__main__":
         logger.addHandler(log_handler)
 
         # Perform backup
-        run_full()
+        try:
+            run_full()
+        except KeyboardInterrupt:
+            print()
+            printlog("Interrupted by user", level="info")
 
         dir_processing_times.sort(key=lambda item: item[1], reverse=True)
         if config.STAY_OPEN:
