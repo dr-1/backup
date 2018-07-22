@@ -309,8 +309,11 @@ def show_progress(processed, total, overwrite=True):
         end = "\r"  # Resets the cursor to the start of the line
     else:
         end = "\n"  # New line
-    print(f"{processed}/{total} files ({processed / total:.0%}) processed",
-          end=end)
+    try:
+        ratio = processed / total
+    except ZeroDivisionError:
+        ratio = 1
+    print(f"{processed}/{total} files ({ratio:.0%}) processed", end=end)
 
 
 def mark_deleted(source_dir, target_dir):
