@@ -12,14 +12,14 @@ config will not be loaded when running the program repeatedly in
 interactive mode. Restart the interpreter to reload config.
 """
 
-import os
-import time
-import zipfile
+import argparse
 import datetime as dt
 import fnmatch
 import logging
-import argparse
+import os
+import time
 import warnings
+import zipfile
 
 try:
     import colorama  # pip install colorama
