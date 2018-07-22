@@ -610,6 +610,9 @@ def printlog(content, level):
 
 
 # Prepare logging
+log_file_dir = os.path.split(config.LOG_FILE)[0]
+if not os.path.isdir(log_file_dir):
+    os.makedirs(log_file_dir)
 logger = logging.Logger(name=__name__)
 log_handler = logging.NullHandler()  # Replaced later if config is valid
 logger.addHandler(log_handler)
